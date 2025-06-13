@@ -1,0 +1,10 @@
+script {
+    // Import statements
+    use std::signer;
+    
+    fun ${NAME}(account: signer) {
+        // Script logic here
+        let addr = signer::address_of(&account);
+        // TODO: Implement script logic
+    }
+}

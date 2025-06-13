@@ -1,0 +1,173 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.suimove.intellij</id>
+    <name>Sui Move Language</name>
+    <vendor email="support@suimove.com" url="https://github.com/yourusername/sui-move-language">Sui Move</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <resource-bundle>messages.MoveBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- File Type -->
+        <fileType
+                name="Move"
+                implementationClass="com.suimove.intellij.MoveFileType"
+                fieldName="INSTANCE"
+                language="Move"
+                extensions="move"/>
+
+        <!-- Language -->
+        <lang.parserDefinition
+                language="Move"
+                implementationClass="com.suimove.intellij.parser.MoveParserDefinition"/>
+
+        <!-- Syntax Highlighter -->
+        <lang.syntaxHighlighterFactory
+                language="Move"
+                implementationClass="com.suimove.intellij.highlighting.MoveSyntaxHighlighterFactory"/>
+
+        <!-- Color Settings Page -->
+        <colorSettingsPage
+                implementation="com.suimove.intellij.highlighting.MoveColorSettingsPage"/>
+
+        <!-- Annotator -->
+        <annotator
+                language="Move"
+                implementationClass="com.suimove.intellij.annotator.MoveAnnotator"/>
+
+        <!-- Code Completion -->
+        <completion.contributor
+                language="Move"
+                implementationClass="com.suimove.intellij.completion.MoveCompletionContributor"/>
+
+        <!-- Brace Matcher -->
+        <lang.braceMatcher
+                language="Move"
+                implementationClass="com.suimove.intellij.MoveBraceMatcher"/>
+
+        <!-- Quote Handler -->
+        <lang.quoteHandler
+                language="Move"
+                implementationClass="com.suimove.intellij.MoveQuoteHandler"/>
+
+        <!-- Commenter -->
+        <lang.commenter
+                language="Move"
+                implementationClass="com.suimove.intellij.MoveCommenter"/>
+
+        <!-- Structure View -->
+        <lang.psiStructureViewFactory
+                language="Move"
+                implementationClass="com.suimove.intellij.structure.MoveStructureViewFactory"/>
+
+        <!-- Formatter -->
+        <lang.formatter
+                language="Move"
+                implementationClass="com.suimove.intellij.formatter.MoveFormattingModelBuilder"/>
+
+        <!-- Code Style Settings -->
+        <codeStyleSettingsProvider
+                implementation="com.suimove.intellij.formatter.MoveCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="com.suimove.intellij.formatter.MoveLanguageCodeStyleSettingsProvider"/>
+
+        <!-- Reference and Navigation -->
+        <psi.referenceContributor language="Move" 
+                                  implementation="com.suimove.intellij.psi.MoveReferenceContributor"/>
+        <lang.findUsagesProvider language="Move"
+                                 implementation="com.suimove.intellij.findusages.MoveFindUsagesProvider"/>
+        <gotoDeclarationHandler implementation="com.suimove.intellij.navigation.MoveGotoDeclarationHandler"/>
+        
+        <!-- Refactoring -->
+        <lang.refactoringSupport language="Move"
+                                 implementation="com.suimove.intellij.refactoring.MoveRefactoringSupportProvider"/>
+        <lang.namesValidator language="Move"
+                             implementation="com.suimove.intellij.refactoring.MoveNamesValidator"/>
+        
+        <!-- Inspections -->
+        <localInspection language="Move"
+                         shortName="MoveUnusedVariable"
+                         displayName="Unused variable"
+                         groupName="Move"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.suimove.intellij.inspections.MoveUnusedVariableInspection"/>
+        
+        <localInspection language="Move"
+                         shortName="MoveNamingConvention"
+                         displayName="Naming convention violations"
+                         groupName="Move"
+                         enabledByDefault="true"
+                         level="WEAK WARNING"
+                         implementationClass="com.suimove.intellij.inspections.MoveNamingConventionInspection"/>
+        
+        <!-- Intentions -->
+        <intentionAction>
+            <className>com.suimove.intellij.intentions.MoveAddTypeAnnotationIntention</className>
+            <category>Move/Type annotations</category>
+        </intentionAction>
+        
+        <intentionAction>
+            <className>com.suimove.intellij.intentions.MoveConvertToPublicIntention</className>
+            <category>Move/Visibility</category>
+        </intentionAction>
+        
+        <!-- Live Templates -->
+        <liveTemplateContext implementation="com.suimove.intellij.templates.MoveTemplateContextType"/>
+        <defaultLiveTemplates file="/liveTemplates/Move.xml"/>
+        
+        <!-- Settings -->
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.suimove.intellij.settings.MoveSettingsConfigurable"
+                id="com.suimove.intellij.settings"
+                displayName="Sui Move"/>
+
+        <!-- Tool Window -->
+        <toolWindow
+                id="Sui Move"
+                secondary="true"
+                icon="/icons/move.svg"
+                anchor="right"
+                factoryClass="com.suimove.intellij.toolwindow.MoveToolWindowFactory"/>
+
+        <!-- Notification Group -->
+        <notificationGroup
+                id="Sui Move"
+                displayType="BALLOON"/>
+    </extensions>
+
+    <projectService serviceImplementation="com.suimove.intellij.compiler.MoveCompilerService"/>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="Move.NewMoveFile"
+                class="com.suimove.intellij.actions.CreateMoveFileAction"
+                text="Move File"
+                description="Create new Move file">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+        </action>
+
+        <group id="Move.ToolsMenu"
+               text="Sui Move"
+               popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            
+            <action id="Move.Build"
+                    class="com.suimove.intellij.actions.MoveBuildAction"
+                    text="Build Project"
+                    description="Build Move project"/>
+            
+            <action id="Move.Test"
+                    class="com.suimove.intellij.actions.MoveTestAction"
+                    text="Run Tests"
+                    description="Run Move tests"/>
+            
+            <action id="Move.Deploy"
+                    class="com.suimove.intellij.actions.MoveDeployAction"
+                    text="Deploy"
+                    description="Deploy Move modules"/>
+        </group>
+    </actions>
+</idea-plugin>

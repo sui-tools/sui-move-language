@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Move">
+    <template name="fun" value="fun $NAME$($PARAMS$)$RETURN$ {&#10;    $END$&#10;}"
+              description="Create a function"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="function_name" alwaysStopAt="true"/>
+        <variable name="PARAMS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="RETURN" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="pubfun" value="public fun $NAME$($PARAMS$)$RETURN$ {&#10;    $END$&#10;}"
+              description="Create a public function"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="function_name" alwaysStopAt="true"/>
+        <variable name="PARAMS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="RETURN" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="entry" value="entry fun $NAME$($PARAMS$) {&#10;    $END$&#10;}"
+              description="Create an entry function"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="entry_function" alwaysStopAt="true"/>
+        <variable name="PARAMS" expression="" defaultValue="ctx: &amp;mut TxContext" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="struct" value="struct $NAME$ has $ABILITIES$ {&#10;    $FIELDS$&#10;}"
+              description="Create a struct"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="StructName" alwaysStopAt="true"/>
+        <variable name="ABILITIES" expression="" defaultValue="key, store" alwaysStopAt="true"/>
+        <variable name="FIELDS" expression="" defaultValue="id: UID," alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="module" value="module $ADDRESS$::$NAME$ {&#10;    $END$&#10;}"
+              description="Create a module"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="ADDRESS" expression="" defaultValue="0x0" alwaysStopAt="true"/>
+        <variable name="NAME" expression="" defaultValue="module_name" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="test" value="#[test]&#10;fun $NAME$() {&#10;    $END$&#10;}"
+              description="Create a test function"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="test_function" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+    
+    <template name="use" value="use $MODULE$::$ITEM$;"
+              description="Import a module or item"
+              toReformat="true"
+              toShortenFQNames="true">
+        <variable name="MODULE" expression="" defaultValue="std::vector" alwaysStopAt="true"/>
+        <variable name="ITEM" expression="" defaultValue="{Self}" alwaysStopAt="true"/>
+        <context>
+            <option name="MOVE" value="true"/>
+        </context>
+    </template>
+</templateSet>

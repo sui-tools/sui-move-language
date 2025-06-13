@@ -1,0 +1,19 @@
+module ${PACKAGE_ADDRESS}::${NAME} {
+    // Import statements
+    use std::vector;
+    
+    // Constants
+    
+    // Structs
+    
+    // Functions
+    public fun example(): u64 {
+        42
+    }
+    
+    // Tests
+    #[test]
+    fun test_example() {
+        assert!(example() == 42, 0);
+    }
+}

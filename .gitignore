@@ -1,0 +1,35 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# Plugin build
+/build/
+/out/
+/classes/
+/generated/
+
+# Local configuration
+local.properties
