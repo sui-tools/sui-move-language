@@ -14,9 +14,11 @@ class MoveReference(
         val file = element.containingFile as? MoveFile ?: return null
         
         // Search in current module
-        val module = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) { 
-            it.node?.elementType == MoveTypes.MODULE_DEFINITION 
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.MODULE_DEFINITION) {
+            current = current.parent
         }
+        val module = current
         
         if (module != null) {
             // Look for functions
@@ -72,9 +74,11 @@ class MoveReference(
         val file = element.containingFile as? MoveFile ?: return emptyArray()
         
         // Collect all available symbols
-        val module = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) { 
-            it.node?.elementType == MoveTypes.MODULE_DEFINITION 
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.MODULE_DEFINITION) {
+            current = current.parent
         }
+        val module = current
         
         if (module != null) {
             // Add functions

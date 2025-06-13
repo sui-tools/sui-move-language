@@ -2,6 +2,50 @@
 
 A comprehensive IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
 
+## Installation
+
+### From Distribution File
+1. Download the plugin distribution: `build/distributions/sui-move-language-0.1.0.zip`
+2. In IntelliJ IDEA: **File → Settings → Plugins → ⚙️ → Install Plugin from Disk...**
+3. Select the downloaded ZIP file
+4. Restart the IDE
+
+### From Source
+```bash
+# Clone the repository
+git clone https://github.com/ravidsrk/sui-move-language.git
+cd sui-move-language
+
+# Build the plugin
+./gradlew build -x test
+
+# The plugin ZIP will be in: build/distributions/sui-move-language-0.1.0.zip
+
+# Or run in sandbox IDE for testing
+./gradlew runIde -x compileTestKotlin -x test
+```
+
+### From JetBrains Marketplace (Coming Soon)
+1. Open your JetBrains IDE (IntelliJ IDEA, CLion, etc.)
+2. Go to `Settings/Preferences` → `Plugins`
+3. Search for "Sui Move Language"
+4. Click `Install`
+
+<!-- Plugin description -->
+Sui Move Language Support is a powerful JetBrains IDE plugin that provides comprehensive support for the Move programming language, specifically optimized for Sui blockchain development.
+
+This plugin offers:
+- Full syntax highlighting and code parsing for Move files
+- Intelligent code completion with context awareness
+- Real-time error detection and semantic analysis
+- Code navigation and refactoring capabilities
+- Integration with Sui CLI tools
+- Project templates and file templates
+- Customizable code formatting
+
+Whether you're building smart contracts, developing dApps, or exploring the Sui blockchain, this plugin enhances your development experience with professional IDE features tailored for Move development.
+<!-- Plugin description end -->
+
 ## Features
 
 ### Core Language Support
@@ -61,31 +105,6 @@ A comprehensive IDE plugin for the Move programming language, specifically tailo
 - **Quote Handling**: Smart quote completion
 - **Code Folding**: Collapse/expand code blocks
 - **Parameter Hints**: Display parameter names in function calls
-
-## Installation
-
-### From JetBrains Marketplace (Coming Soon)
-1. Open your JetBrains IDE (IntelliJ IDEA, CLion, etc.)
-2. Go to `Settings/Preferences` → `Plugins`
-3. Search for "Sui Move Language"
-4. Click `Install`
-
-### From Source
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/ravidsrk/sui-move-language.git
-   cd sui-move-language
-   ```
-
-2. Build the plugin:
-   ```bash
-   ./gradlew buildPlugin
-   ```
-
-3. Install the plugin:
-   - Go to `Settings/Preferences` → `Plugins`
-   - Click the gear icon → `Install Plugin from Disk`
-   - Select `build/distributions/sui-move-language-*.zip`
 
 ## Configuration
 

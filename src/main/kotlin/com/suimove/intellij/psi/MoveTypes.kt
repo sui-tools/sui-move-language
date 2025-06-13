@@ -101,6 +101,24 @@ object MoveTypes {
     @JvmField val BYTE_STRING_LITERAL = IElementType("BYTE_STRING_LITERAL", MoveLanguage)
     @JvmField val IDENTIFIER = IElementType("IDENTIFIER", MoveLanguage)
     
+    // AST Node Types
+    @JvmField val MODULE_DEFINITION = IElementType("MODULE_DEFINITION", MoveLanguage)
+    @JvmField val SCRIPT_DEFINITION = IElementType("SCRIPT_DEFINITION", MoveLanguage)
+    @JvmField val FUNCTION_DEFINITION = IElementType("FUNCTION_DEFINITION", MoveLanguage)
+    @JvmField val STRUCT_DEFINITION = IElementType("STRUCT_DEFINITION", MoveLanguage)
+    @JvmField val CONST_DEFINITION = IElementType("CONST_DEFINITION", MoveLanguage)
+    @JvmField val USE_DECL = IElementType("USE_DECL", MoveLanguage)
+    @JvmField val INTEGER_LITERAL = IElementType("INTEGER_LITERAL", MoveLanguage)
+    @JvmField val HEX_LITERAL = IElementType("HEX_LITERAL", MoveLanguage)
+    @JvmField val LET_BINDING = IElementType("LET_BINDING", MoveLanguage)
+    @JvmField val EXPRESSION = IElementType("EXPRESSION", MoveLanguage)
+    @JvmField val BLOCK = IElementType("BLOCK", MoveLanguage)
+    @JvmField val FUNCTION_CALL = IElementType("FUNCTION_CALL", MoveLanguage)
+    @JvmField val FUNCTION_CALL_ARGS = IElementType("FUNCTION_CALL_ARGS", MoveLanguage)
+    @JvmField val BINARY_EXPR = IElementType("BINARY_EXPR", MoveLanguage)
+    @JvmField val ASSIGNMENT = IElementType("ASSIGNMENT", MoveLanguage)
+    @JvmField val TYPE_ANNOTATION = IElementType("TYPE_ANNOTATION", MoveLanguage)
+    
     object Factory {
         fun createElement(node: com.intellij.lang.ASTNode): com.intellij.psi.PsiElement {
             return com.intellij.extapi.psi.ASTWrapperPsiElement(node)

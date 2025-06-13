@@ -9,6 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.21"
     id("org.jetbrains.intellij") version "1.17.0"
     id("org.jetbrains.changelog") version "2.2.0"
+    id("org.jetbrains.grammarkit") version "2022.3.2"
 }
 
 group = properties("pluginGroup").get()
@@ -16,6 +17,14 @@ version = properties("pluginVersion").get()
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/gen")
+        }
+    }
 }
 
 kotlin {
@@ -38,6 +47,17 @@ changelog {
 tasks {
     wrapper {
         gradleVersion = properties("gradleVersion").get()
+    }
+    
+    generateLexer {
+        sourceFile.set(file("src/main/flex/Move.flex"))
+        targetDir.set("src/main/gen/com/suimove/intellij/lexer")
+        targetClass.set("_MoveLexer")
+        purgeOldFiles.set(true)
+    }
+    
+    compileKotlin {
+        dependsOn(generateLexer)
     }
 
     patchPluginXml {
@@ -86,6 +106,6 @@ tasks {
     publishPlugin {
         dependsOn("patchChangelog")
         token.set(environment("PUBLISH_TOKEN"))
-        channels.set(properties("pluginVersion").map { listOf(it.split('-').getOrElse(1) { "default" }.split('.').first()) })
+        // channels.set(listOf(properties("pluginVersion").get().split('-').getOrElse(1) { "default" }.split('.').first()))
     }
 }

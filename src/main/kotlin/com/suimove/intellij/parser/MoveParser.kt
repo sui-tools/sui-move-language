@@ -10,7 +10,8 @@ import com.suimove.intellij.psi.MoveTypes
 
 class MoveParser : PsiParser, LightPsiParser {
     override fun parse(root: IElementType, builder: PsiBuilder): ASTNode {
-        return parseLight(root, builder)
+        parseLight(root, builder)
+        return builder.treeBuilt
     }
 
     override fun parseLight(root: IElementType, builder: PsiBuilder) {

@@ -4,7 +4,6 @@ import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
 import com.suimove.intellij.psi.MoveElementFactory
 import com.suimove.intellij.psi.MoveTypes
 
@@ -14,9 +13,11 @@ class MoveConvertToPublicIntention : PsiElementBaseIntentionAction() {
     override fun getFamilyName(): String = "Move visibility modifiers"
     
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-        val function = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) {
-            it.node?.elementType == MoveTypes.FUNCTION_DEFINITION
-        } ?: return false
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.FUNCTION_DEFINITION) {
+            current = current.parent
+        }
+        val function = current ?: return false
         
         // Check if function is not already public
         val hasPublic = function.node?.findChildByType(MoveTypes.PUBLIC) != null
@@ -26,9 +27,11 @@ class MoveConvertToPublicIntention : PsiElementBaseIntentionAction() {
     }
     
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
-        val function = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) {
-            it.node?.elementType == MoveTypes.FUNCTION_DEFINITION
-        } ?: return
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.FUNCTION_DEFINITION) {
+            current = current.parent
+        }
+        val function = current ?: return
         
         val funKeyword = function.node?.findChildByType(MoveTypes.FUN) ?: return
         

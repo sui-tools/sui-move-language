@@ -40,10 +40,19 @@ class MoveUnusedVariableInspection : LocalInspectionTool() {
     }
     
     private fun findScope(element: PsiElement): PsiElement? {
-        // Find the enclosing block or function
-        return PsiTreeUtil.getParentOfType(element, PsiElement::class.java) {
-            it.node?.elementType in listOf(MoveTypes.BLOCK, MoveTypes.FUNCTION_DEFINITION)
+        // Find parent function
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.FUNCTION_DEFINITION) {
+            current = current.parent
         }
+        val function = current ?: return null
+        
+        // Find parent block
+        current = function
+        while (current != null && current.node?.elementType != MoveTypes.BLOCK) {
+            current = current.parent
+        }
+        return current ?: function
     }
     
     private fun isVariableUsed(variableName: String, scope: PsiElement, declaration: PsiElement): Boolean {

@@ -5,7 +5,6 @@ import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
 import com.suimove.intellij.psi.MoveElementFactory
 import com.suimove.intellij.psi.MoveTypes
 
@@ -15,19 +14,24 @@ class MoveAddTypeAnnotationIntention : PsiElementBaseIntentionAction() {
     override fun getFamilyName(): String = "Move type annotations"
     
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-        val letBinding = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) {
-            it.node?.elementType == MoveTypes.LET_BINDING
-        } ?: return false
+        // Find parent let binding
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.LET_BINDING) {
+            current = current.parent
+        }
+        val letBinding = current ?: return false
         
-        // Check if type annotation is missing
-        val hasTypeAnnotation = letBinding.node?.findChildByType(MoveTypes.COLON) != null
-        return !hasTypeAnnotation
+        // Check if already has type annotation
+        return letBinding.node?.findChildByType(MoveTypes.TYPE_ANNOTATION) == null
     }
     
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
-        val letBinding = PsiTreeUtil.getParentOfType(element, PsiElement::class.java) {
-            it.node?.elementType == MoveTypes.LET_BINDING
-        } ?: return
+        // Find parent let binding
+        var current: PsiElement? = element
+        while (current != null && current.node?.elementType != MoveTypes.LET_BINDING) {
+            current = current.parent
+        }
+        val letBinding = current ?: return
         
         val identifier = letBinding.node?.findChildByType(MoveTypes.IDENTIFIER) ?: return
         
