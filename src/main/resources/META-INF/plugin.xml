@@ -74,6 +74,7 @@
         <!-- Reference and Navigation -->
         <psi.referenceContributor language="Move" 
                                   implementation="com.suimove.intellij.psi.MoveReferenceContributor"/>
+        
         <lang.findUsagesProvider language="Move"
                                  implementation="com.suimove.intellij.findusages.MoveFindUsagesProvider"/>
         <gotoDeclarationHandler implementation="com.suimove.intellij.navigation.MoveGotoDeclarationHandler"/>

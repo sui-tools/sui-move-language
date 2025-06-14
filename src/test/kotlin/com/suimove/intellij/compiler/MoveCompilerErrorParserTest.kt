@@ -157,8 +157,13 @@ class MoveCompilerErrorParserTest : BasePlatformTestCase() {
         
         val errors = MoveCompilerErrorParser.parseCompilerOutput(output, project)
         
-        // This format is not currently supported by the parser
-        assertEquals("Should parse 0 errors for unsupported format", 0, errors.size)
+        assertEquals("Should parse 1 error", 1, errors.size)
+        
+        val error = errors[0]
+        assertEquals("Should parse error message", "failed to resolve dependencies", error.message)
+        assertNull("Should have no file location", error.file)
+        assertEquals("Should have line 0 for missing location", 0, error.line)
+        assertEquals("Should be error severity", ErrorSeverity.ERROR, error.severity)
     }
     
     fun testParseMultilineMessage() {

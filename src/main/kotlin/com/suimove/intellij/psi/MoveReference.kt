@@ -13,56 +13,116 @@ class MoveReference(
         val name = element.text
         val file = element.containingFile as? MoveFile ?: return null
         
-        // Search in current module
-        var current: PsiElement? = element
-        while (current != null && current.node?.elementType != MoveTypes.MODULE_DEFINITION) {
-            current = current.parent
-        }
-        val module = current
+        // Since we have a flat PSI structure, we need to search through all identifiers
+        // and check if they are definitions based on their preceding tokens
         
-        if (module != null) {
-            // Look for functions
-            val functions = PsiTreeUtil.findChildrenOfType(module, PsiElement::class.java)
-                .filter { it.node?.elementType == MoveTypes.FUNCTION_DEFINITION }
+        val allIdentifiers = PsiTreeUtil.findChildrenOfType(file, PsiElement::class.java)
+            .filter { it.node?.elementType == MoveTypes.IDENTIFIER }
+        
+        for (identifier in allIdentifiers) {
+            // Skip if it's the same element
+            if (identifier == element) continue
             
-            for (function in functions) {
-                val functionName = function.node?.findChildByType(MoveTypes.IDENTIFIER)?.text
-                if (functionName == name) {
-                    return function
+            // Check if this identifier has the same name
+            if (identifier.text != name) continue
+            
+            // Check if this identifier is a definition
+            var prevSibling = identifier.prevSibling
+            while (prevSibling != null && prevSibling.node?.elementType == TokenType.WHITE_SPACE) {
+                prevSibling = prevSibling.prevSibling
+            }
+            
+            // Check if preceded by definition keywords
+            val isDefinition = prevSibling?.node?.elementType in listOf(
+                MoveTypes.MODULE,
+                MoveTypes.FUN,
+                MoveTypes.STRUCT,
+                MoveTypes.CONST,
+                MoveTypes.LET,
+                MoveTypes.USE
+            )
+            
+            if (isDefinition) {
+                return identifier
+            }
+            
+            // Check for function parameters (identifier followed by colon in function signature)
+            var nextSibling = identifier.nextSibling
+            while (nextSibling != null && nextSibling.node?.elementType == TokenType.WHITE_SPACE) {
+                nextSibling = nextSibling.nextSibling
+            }
+            
+            if (nextSibling?.node?.elementType == MoveTypes.COLON) {
+                // Check if we're in a function parameter list by looking for parentheses
+                var searchBack: PsiElement? = identifier
+                var foundOpenParen = false
+                var parenBalance = 0
+                
+                while (searchBack != null && !foundOpenParen) {
+                    searchBack = searchBack.prevSibling
+                    when (searchBack?.node?.elementType) {
+                        MoveTypes.RPAREN -> parenBalance++
+                        MoveTypes.LPAREN -> {
+                            parenBalance--
+                            if (parenBalance < 0) {
+                                // Found the opening parenthesis of our context
+                                // Now check if there's a 'fun' keyword before it
+                                var funCheck = searchBack.prevSibling
+                                while (funCheck != null) {
+                                    if (funCheck.node?.elementType == MoveTypes.FUN) {
+                                        return identifier
+                                    }
+                                    if (funCheck.node?.elementType != TokenType.WHITE_SPACE &&
+                                        funCheck.node?.elementType != MoveTypes.IDENTIFIER) {
+                                        break
+                                    }
+                                    funCheck = funCheck.prevSibling
+                                }
+                                break
+                            }
+                        }
+                        MoveTypes.LBRACE -> break // Stop if we hit a brace
+                    }
                 }
             }
             
-            // Look for structs
-            val structs = PsiTreeUtil.findChildrenOfType(module, PsiElement::class.java)
-                .filter { it.node?.elementType == MoveTypes.STRUCT_DEFINITION }
-            
-            for (struct in structs) {
-                val structName = struct.node?.findChildByType(MoveTypes.IDENTIFIER)?.text
-                if (structName == name) {
-                    return struct
+            // Check for struct fields (identifier followed by colon in struct body)
+            if (nextSibling?.node?.elementType == MoveTypes.COLON) {
+                // Look backwards for struct keyword
+                var searchElement: PsiElement? = identifier
+                var foundStruct = false
+                var braceCount = 0
+                
+                while (searchElement != null && searchElement.textOffset > 0) {
+                    searchElement = searchElement.prevSibling ?: searchElement.parent
+                    
+                    when (searchElement?.node?.elementType) {
+                        MoveTypes.RBRACE -> braceCount++
+                        MoveTypes.LBRACE -> {
+                            braceCount--
+                            if (braceCount < 0) {
+                                // We've found the opening brace of our context
+                                var structCheck = searchElement.prevSibling
+                                while (structCheck != null) {
+                                    if (structCheck.node?.elementType == MoveTypes.STRUCT) {
+                                        foundStruct = true
+                                        break
+                                    }
+                                    if (structCheck.node?.elementType != TokenType.WHITE_SPACE &&
+                                        structCheck.node?.elementType != MoveTypes.IDENTIFIER) {
+                                        break
+                                    }
+                                    structCheck = structCheck.prevSibling
+                                }
+                                break
+                            }
+                        }
+                    }
                 }
-            }
-            
-            // Look for constants
-            val constants = PsiTreeUtil.findChildrenOfType(module, PsiElement::class.java)
-                .filter { it.node?.elementType == MoveTypes.CONST_DEFINITION }
-            
-            for (constant in constants) {
-                val constantName = constant.node?.findChildByType(MoveTypes.IDENTIFIER)?.text
-                if (constantName == name) {
-                    return constant
+                
+                if (foundStruct) {
+                    return identifier
                 }
-            }
-        }
-        
-        // Search in use statements
-        val useStatements = PsiTreeUtil.findChildrenOfType(file, PsiElement::class.java)
-            .filter { it.node?.elementType == MoveTypes.USE_DECL }
-        
-        for (use in useStatements) {
-            val alias = use.node?.findChildByType(MoveTypes.IDENTIFIER)?.text
-            if (alias == name) {
-                return use
             }
         }
         

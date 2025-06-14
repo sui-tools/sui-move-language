@@ -5,7 +5,7 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import java.io.File
 
 data class MoveCompilerError(
-    val file: String,
+    val file: String?,
     val line: Int,
     val column: Int,
     val message: String,
@@ -20,12 +20,20 @@ enum class ErrorSeverity {
 
 class MoveCompilerErrorParser {
     companion object {
-        private val ERROR_PATTERN = Regex(
-            """(?:error|warning)\[E\d+\]:\s*(.+)\s*┌─\s*(.+):(\d+):(\d+)"""
+        private val ERROR_HEADER_PATTERN = Regex(
+            """(error|warning)\[[EW]\d+\]:\s*(.+)"""
+        )
+        
+        private val LOCATION_PATTERN = Regex(
+            """┌─\s*(.+):(\d+):(\d+)"""
         )
         
         private val SIMPLE_ERROR_PATTERN = Regex(
             """(.+):(\d+):(\d+):\s*(error|warning):\s*(.+)"""
+        )
+        
+        private val SIMPLE_ERROR_NO_LOCATION_PATTERN = Regex(
+            """^(error|warning):\s*(.+)"""
         )
         
         fun parseCompilerOutput(output: String, project: Project): List<MoveCompilerError> {
@@ -36,41 +44,75 @@ class MoveCompilerErrorParser {
             while (i < lines.size) {
                 val line = lines[i]
                 
-                // Try to match error pattern
-                ERROR_PATTERN.find(line)?.let { match ->
-                    val message = match.groupValues[1]
-                    val file = match.groupValues[2]
-                    val lineNum = match.groupValues[3].toIntOrNull() ?: 1
-                    val column = match.groupValues[4].toIntOrNull() ?: 1
+                // Try to match error header pattern
+                val headerMatch = ERROR_HEADER_PATTERN.find(line)
+                if (headerMatch != null) {
+                    val severity = headerMatch.groupValues[1]
+                    val message = headerMatch.groupValues[2]
                     
-                    errors.add(MoveCompilerError(
-                        file = resolveFilePath(file, project),
-                        line = lineNum,
-                        column = column,
-                        message = message.trim(),
-                        severity = if (line.startsWith("error")) ErrorSeverity.ERROR else ErrorSeverity.WARNING
-                    ))
-                }
-                
-                // Try simple error pattern
-                SIMPLE_ERROR_PATTERN.find(line)?.let { match ->
-                    val file = match.groupValues[1]
-                    val lineNum = match.groupValues[2].toIntOrNull() ?: 1
-                    val column = match.groupValues[3].toIntOrNull() ?: 1
-                    val severity = match.groupValues[4]
-                    val message = match.groupValues[5]
-                    
-                    errors.add(MoveCompilerError(
-                        file = resolveFilePath(file, project),
-                        line = lineNum,
-                        column = column,
-                        message = message.trim(),
-                        severity = when (severity.lowercase()) {
-                            "error" -> ErrorSeverity.ERROR
-                            "warning" -> ErrorSeverity.WARNING
-                            else -> ErrorSeverity.INFO
+                    // Look for location on next lines
+                    for (j in (i + 1) until minOf(lines.size, i + 5)) {
+                        val locationMatch = LOCATION_PATTERN.find(lines[j])
+                        if (locationMatch != null) {
+                            val file = locationMatch.groupValues[1]
+                            val lineNum = locationMatch.groupValues[2].toIntOrNull() ?: 1
+                            val column = locationMatch.groupValues[3].toIntOrNull() ?: 1
+                            
+                            errors.add(MoveCompilerError(
+                                file = resolveFilePath(file, project),
+                                line = lineNum,
+                                column = column,
+                                message = message.trim(),
+                                severity = when (severity.lowercase()) {
+                                    "error" -> ErrorSeverity.ERROR
+                                    "warning" -> ErrorSeverity.WARNING
+                                    else -> ErrorSeverity.INFO
+                                }
+                            ))
+                            break
                         }
-                    ))
+                    }
+                } else {
+                    // Try simple error pattern with location
+                    val simpleMatch = SIMPLE_ERROR_PATTERN.find(line)
+                    if (simpleMatch != null) {
+                        val file = simpleMatch.groupValues[1]
+                        val lineNum = simpleMatch.groupValues[2].toIntOrNull() ?: 1
+                        val column = simpleMatch.groupValues[3].toIntOrNull() ?: 1
+                        val severity = simpleMatch.groupValues[4]
+                        val message = simpleMatch.groupValues[5]
+                        
+                        errors.add(MoveCompilerError(
+                            file = resolveFilePath(file, project),
+                            line = lineNum,
+                            column = column,
+                            message = message.trim(),
+                            severity = when (severity.lowercase()) {
+                                "error" -> ErrorSeverity.ERROR
+                                "warning" -> ErrorSeverity.WARNING
+                                else -> ErrorSeverity.INFO
+                            }
+                        ))
+                    } else {
+                        // Try simple error pattern without location
+                        val simpleNoLocationMatch = SIMPLE_ERROR_NO_LOCATION_PATTERN.find(line)
+                        if (simpleNoLocationMatch != null) {
+                            val severity = simpleNoLocationMatch.groupValues[1]
+                            val message = simpleNoLocationMatch.groupValues[2]
+                            
+                            errors.add(MoveCompilerError(
+                                file = null,
+                                line = 0,
+                                column = 0,
+                                message = message.trim(),
+                                severity = when (severity.lowercase()) {
+                                    "error" -> ErrorSeverity.ERROR
+                                    "warning" -> ErrorSeverity.WARNING
+                                    else -> ErrorSeverity.INFO
+                                }
+                            ))
+                        }
+                    }
                 }
                 
                 i++

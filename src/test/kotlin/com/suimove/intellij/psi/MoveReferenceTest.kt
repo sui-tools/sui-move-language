@@ -15,7 +15,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find reference at caret", reference)
         
         val resolved = reference?.resolve()
@@ -34,7 +34,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find function reference", reference)
         
         val resolved = reference?.resolve()
@@ -54,7 +54,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find struct reference", reference)
         
         val resolved = reference?.resolve()
@@ -72,7 +72,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find module reference", reference)
     }
     
@@ -90,7 +90,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find field reference", reference)
         
         val resolved = reference?.resolve()
@@ -106,7 +106,7 @@ class MoveReferenceTest : BasePlatformTestCase() {
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
+        val reference = myFixture.file.findReferenceAt(myFixture.caretOffset)
         assertNotNull("Should find parameter reference", reference)
         
         val resolved = reference?.resolve()
@@ -121,13 +121,14 @@ class MoveReferenceTest : BasePlatformTestCase() {
                 }
                 
                 fun test_ref() {
-                    let x = identity<<caret>u64>(42);
+                    let result = identity::<u64>(42);
                 }
             }
         """.trimIndent())
         
-        val reference = myFixture.file.findElementAt(myFixture.caretOffset)?.parent?.reference
-        // Type references might be handled differently
-        // This test documents expected behavior
+        // This test might not find a reference due to generic syntax
+        // but we include it for completeness
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)
+        // Generic type references might need special handling
     }
 }
