@@ -13,7 +13,6 @@
         <fileType
                 name="Move"
                 implementationClass="com.suimove.intellij.MoveFileType"
-                fieldName="INSTANCE"
                 language="Move"
                 extensions="move"/>
 
@@ -136,9 +135,10 @@
         <notificationGroup
                 id="Sui Move"
                 displayType="BALLOON"/>
+                
+        <!-- Project Service -->
+        <projectService serviceImplementation="com.suimove.intellij.compiler.MoveCompilerService"/>
     </extensions>
-
-    <projectService serviceImplementation="com.suimove.intellij.compiler.MoveCompilerService"/>
 
     <actions>
         <!-- Add your actions here -->

@@ -158,4 +158,153 @@ class MoveAnnotatorTest : BasePlatformTestCase() {
         assertTrue("Should highlight struct name",
             highlights.any { it.text == "MyStruct" })
     }
+    
+    fun testHighlightUnresolvedImport() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                use 0x1::NonExistentModule;
+                
+                fun main() {
+                    NonExistentModule::some_function();
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+        
+        val highlights = myFixture.doHighlighting()
+        assertTrue("Should highlight unresolved import",
+            highlights.any { it.text == "NonExistentModule" && it.severity.name == "ERROR" })
+    }
+    
+    fun testHighlightTypeMismatch() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                fun main() {
+                    let x: u64 = true; // Type mismatch
+                    let y: bool = 42;  // Type mismatch
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightUnusedVariable() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                fun main() {
+                    let unused_var = 42;
+                    let used_var = 10;
+                    let result = used_var + 5;
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, true, true)
+        
+        val highlights = myFixture.doHighlighting()
+        assertTrue("Should highlight unused variable",
+            highlights.any { it.text == "unused_var" && it.severity.name == "WARNING" })
+    }
+    
+    fun testHighlightMissingAbility() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                struct NoCopy {}
+                
+                fun main() {
+                    let x = NoCopy {};
+                    let y = x; // Error: NoCopy doesn't have copy ability
+                    let z = x; // Error: x was moved
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightInvalidAddressLiteral() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                fun main() {
+                    let valid_addr = @0x1;
+                    let invalid_addr1 = @0xG; // Invalid hex
+                    let invalid_addr2 = @123; // Missing 0x prefix
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightDuplicateFieldInStruct() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                struct MyStruct {
+                    field1: u64,
+                    field2: bool,
+                    field1: u64  // Duplicate field
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightInvalidFunctionVisibility() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                public entry fun valid_entry() {}
+                entry public fun invalid_order() {} // Wrong order
+                public public fun duplicate_visibility() {} // Duplicate
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightMissingGenericParameter() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                struct Generic<T> { value: T }
+                
+                fun main() {
+                    let x: Generic = Generic { value: 42 }; // Missing type parameter
+                    let y: Generic<u64> = Generic<u64> { value: 42 }; // Correct
+                }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightInvalidConstantExpression() {
+        myFixture.configureByText("test.move", """
+            module 0x1::test {
+                const VALID: u64 = 42;
+                const INVALID: u64 = get_value(); // Non-constant expression
+                
+                fun get_value(): u64 { 42 }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, false, true)
+    }
+    
+    fun testHighlightCircularDependency() {
+        myFixture.configureByText("test.move", """
+            module 0x1::a {
+                use 0x1::b;
+                public fun func_a() { b::func_b() }
+            }
+            
+            module 0x1::b {
+                use 0x1::a;
+                public fun func_b() { a::func_a() }
+            }
+        """.trimIndent())
+        
+        myFixture.checkHighlighting(true, true, true)
+    }
 }
