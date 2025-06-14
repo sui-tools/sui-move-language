@@ -1,0 +1,9 @@
+#[test_only]
+module ${ADDRESS}::${MODULE_NAME}_tests {
+    use ${ADDRESS}::${MODULE_NAME};
+    
+    #[test]
+    fun test_${NAME}() {
+        // TODO: Implement test
+    }
+}

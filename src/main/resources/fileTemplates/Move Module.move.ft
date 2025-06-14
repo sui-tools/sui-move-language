@@ -1,4 +1,4 @@
-module ${PACKAGE_ADDRESS}::${NAME} {
+module ${ADDRESS}::${NAME} {
     // Import statements
     use std::vector;
     

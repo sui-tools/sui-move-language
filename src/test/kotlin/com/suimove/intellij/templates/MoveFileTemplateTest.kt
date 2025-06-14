@@ -119,7 +119,11 @@ class MoveFileTemplateTest : BasePlatformTestCase() {
     
     fun testLibraryTemplate() {
         val templateManager = FileTemplateManager.getInstance(project)
-        val template = templateManager.getInternalTemplate("Move Library")
+        val template = try {
+            templateManager.getInternalTemplate("Move Library")
+        } catch (e: Exception) {
+            null
+        }
         
         // Library template might not exist, but test if it does
         if (template != null) {

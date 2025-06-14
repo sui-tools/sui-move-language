@@ -113,8 +113,12 @@
         </intentionAction>
         
         <!-- Live Templates -->
-        <liveTemplateContext implementation="com.suimove.intellij.templates.MoveTemplateContextType"/>
+        <liveTemplateContext implementation="com.suimove.intellij.templates.MoveTemplateContextType"
+                           contextId="MOVE"/>
         <defaultLiveTemplates file="/liveTemplates/Move.xml"/>
+        
+        <!-- File Templates -->
+        <fileTemplateGroup implementation="com.suimove.intellij.templates.MoveFileTemplateProvider"/>
         
         <!-- Settings -->
         <applicationConfigurable
