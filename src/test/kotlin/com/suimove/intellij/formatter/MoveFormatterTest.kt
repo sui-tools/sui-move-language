@@ -8,6 +8,8 @@ class MoveFormatterTest : FormatterTestCase() {
     
     override fun getTestDataPath(): String = "src/test/testData/formatter"
     
+    override fun getBasePath(): String = "formatter"
+    
     fun testModuleFormatting() {
         doTextTest(
             """

@@ -1,12 +1,14 @@
 package com.suimove.intellij.intentions
 
+import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class MoveIntentionsTest : BasePlatformTestCase() {
     
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections()
+        // Enable all available inspections for the test
+        myFixture.enableInspections(com.intellij.codeInspection.LocalInspectionTool::class.java)
     }
     
     // Add Type Annotation Intention Tests

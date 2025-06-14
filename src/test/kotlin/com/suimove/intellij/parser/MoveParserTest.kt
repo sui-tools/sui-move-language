@@ -1,7 +1,7 @@
 package com.suimove.intellij.parser
 
 import com.intellij.testFramework.ParsingTestCase
-import com.suimove.intellij.MoveParserDefinition
+import com.suimove.intellij.parser.MoveParserDefinition
 
 class MoveParserTest : ParsingTestCase("", "move", MoveParserDefinition()) {
     

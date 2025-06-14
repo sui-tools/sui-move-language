@@ -20,9 +20,15 @@ repositories {
 }
 
 dependencies {
+    // IntelliJ test framework dependencies are provided by the platform
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
     testImplementation("org.mockito:mockito-core:5.3.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(kotlin("test"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
 }
 
 sourceSets {
@@ -30,11 +36,6 @@ sourceSets {
         java {
             srcDirs("src/main/gen")
         }
-    }
-    // Temporarily disable test source set to fix compilation
-    test {
-        kotlin.setSrcDirs(emptyList<String>())
-        java.setSrcDirs(emptyList<String>())
     }
 }
 
@@ -48,6 +49,12 @@ intellij {
     type.set(properties("platformType"))
     
     plugins.set(listOf("java"))
+    
+    // Download sources for IntelliJ SDK
+    downloadSources.set(true)
+    
+    // Include test framework
+    instrumentCode.set(true)
 }
 
 changelog {
@@ -61,14 +68,42 @@ tasks {
     }
     
     generateLexer {
-        sourceFile.set(file("src/main/flex/Move.flex"))
-        targetDir.set("src/main/gen/com/suimove/intellij/lexer")
-        targetClass.set("_MoveLexer")
-        purgeOldFiles.set(true)
+        sourceFile = file("src/main/flex/Move.flex")
+        targetDir = "src/main/gen/com/suimove/intellij/lexer"
+        targetClass = "_MoveLexer"
+        purgeOldFiles = true
     }
     
     compileKotlin {
+        kotlinOptions.jvmTarget = "17"
         dependsOn(generateLexer)
+    }
+
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "17"
+    }
+
+    test {
+        // Use JUnit Platform for tests
+        useJUnitPlatform()
+        
+        // Set up test JVM arguments
+        jvmArgs = listOf(
+            "-Djava.awt.headless=true",
+            "-Didea.test.framework.detector=com.intellij.testFramework.LightPlatformTestCase",
+            "-Didea.home.path=${layout.buildDirectory.get()}",
+            "-Didea.config.path=${layout.buildDirectory.get()}/config",
+            "-Didea.system.path=${layout.buildDirectory.get()}/system"
+        )
+        
+        // Increase memory for tests
+        maxHeapSize = "1024m"
+        
+        // Show test output
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+        }
     }
 
     patchPluginXml {
@@ -117,6 +152,9 @@ tasks {
     publishPlugin {
         dependsOn("patchChangelog")
         token.set(environment("PUBLISH_TOKEN"))
-        // channels.set(listOf(properties("pluginVersion").get().split('-').getOrElse(1) { "default" }.split('.').first()))
+        // The pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
+        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
+        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+        // channels.set(listOf(properties("pluginVersion").map { it.split('-').getOrElse(1) { "default" }.split('.').first() }))
     }
 }

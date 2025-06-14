@@ -96,25 +96,25 @@ class MoveFindUsagesProviderTest : BasePlatformTestCase() {
     }
     
     fun testGetDescriptiveNameForFunction() {
-        val function = MoveElementFactory.createFunction(project, "test_function")
+        val function = MoveElementFactory.createFunctionDeclaration(project, "test_function")
         assertEquals("Should get function name", "test_function", 
             findUsagesProvider.getDescriptiveName(function))
     }
     
     fun testGetDescriptiveNameForStruct() {
-        val struct = MoveElementFactory.createStruct(project, "MyStruct")
+        val struct = MoveElementFactory.createStructDeclaration(project, "MyStruct")
         assertEquals("Should get struct name", "MyStruct", 
             findUsagesProvider.getDescriptiveName(struct))
     }
     
     fun testGetDescriptiveNameForModule() {
-        val module = MoveElementFactory.createModule(project, "test_module")
+        val module = MoveElementFactory.createModuleDeclaration(project, "0x1", "test_module")
         assertEquals("Should get module name", "test_module", 
             findUsagesProvider.getDescriptiveName(module))
     }
     
     fun testGetNodeTextForFunction() {
-        val function = MoveElementFactory.createFunction(project, "test_function")
+        val function = MoveElementFactory.createFunctionDeclaration(project, "test_function")
         assertNotNull("Should get node text for function", 
             findUsagesProvider.getNodeText(function, true))
         assertTrue("Node text should contain function name", 

@@ -1,5 +1,6 @@
 package com.suimove.intellij.templates
 
+import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateContextType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.suimove.intellij.MoveFileType
@@ -80,8 +81,8 @@ class MoveTemplateContextTypeTest : BasePlatformTestCase() {
         assertTrue("Should be in Move context for comment", contextType.isInContext(context))
     }
     
-    private fun createContext(file: com.intellij.psi.PsiFile): TemplateContextType.Context {
+    private fun createContext(file: com.intellij.psi.PsiFile): TemplateActionContext {
         val offset = myFixture.editor.caretModel.offset
-        return TemplateContextType.Context(file, offset)
+        return TemplateActionContext.create(file, null, offset, offset, false)
     }
 }

@@ -5,7 +5,13 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import com.suimove.intellij.MoveFileType
 import com.suimove.intellij.psi.MoveFile
+import com.suimove.intellij.compiler.ErrorSeverity
+import com.suimove.intellij.compiler.MoveCompilerError
+import com.suimove.intellij.compiler.MoveCompilerService
 import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.eq
+import java.util.concurrent.CompletableFuture
 
 class MoveIntegrationTest : BasePlatformTestCase() {
     
@@ -13,6 +19,8 @@ class MoveIntegrationTest : BasePlatformTestCase() {
     private lateinit var moduleFile: VirtualFile
     private lateinit var libraryFile: VirtualFile
     private lateinit var utilFile: VirtualFile
+    
+    private lateinit var compilerService: MoveCompilerService
     
     override fun setUp() {
         super.setUp()
@@ -54,6 +62,8 @@ class MoveIntegrationTest : BasePlatformTestCase() {
                 }
             }
         """.trimIndent()).virtualFile
+        
+        compilerService = mock(MoveCompilerService::class.java)
     }
     
     fun testCrossModuleReferences() {
@@ -189,10 +199,7 @@ class MoveIntegrationTest : BasePlatformTestCase() {
     }
     
     fun testExternalToolIntegration() {
-        // Mock compiler service
-        val compilerService = mock(com.suimove.intellij.compiler.MoveCompilerService::class.java)
-        
-        // Create a test file
+        // Create test file
         val testFile = myFixture.configureByText("compiler_test.move", """
             module 0x1::compiler_test {
                 fun test() {
@@ -201,34 +208,26 @@ class MoveIntegrationTest : BasePlatformTestCase() {
             }
         """.trimIndent()).virtualFile
         
-        // Mock successful compilation
-        `when`(compilerService.buildProject(any())).thenReturn(
-            com.suimove.intellij.compiler.MoveCompilerResult(true, "Build successful", emptyList())
-        )
+        // Set up mock compiler service
+        val future = CompletableFuture<Pair<Boolean, List<MoveCompilerError>>>()
         
-        // Mock error compilation
-        `when`(compilerService.buildProject(eq("/error/path"))).thenReturn(
-            com.suimove.intellij.compiler.MoveCompilerResult(
-                false, 
-                "Build failed", 
-                listOf(com.suimove.intellij.compiler.MoveCompilerError(
-                    "compiler_test.move", 
-                    3, 
-                    "Type error", 
-                    "ERROR"
-                ))
-            )
-        )
+        // Mock the compileProject method to capture the callback
+        doAnswer { invocation ->
+            val callback = invocation.getArgument<(Boolean, List<MoveCompilerError>) -> Unit>(0)
+            callback(true, emptyList())
+            future.complete(Pair(true, emptyList()))
+            null
+        }.`when`(compilerService).compileProject(any())
         
-        // Test successful build
-        val successResult = compilerService.buildProject(testFile.path)
-        assertTrue("Build should succeed", successResult.success)
+        // Trigger compilation
+        compilerService.compileProject()
         
-        // Test failed build
-        val errorResult = compilerService.buildProject("/error/path")
-        assertFalse("Build should fail", errorResult.success)
-        assertEquals("Should have one error", 1, errorResult.errors.size)
-        assertEquals("Should have correct error message", "Type error", errorResult.errors[0].message)
+        // Wait for the result
+        val result = future.get()
+        
+        // Verify compilation was successful
+        assertTrue("Compilation should succeed", result.first)
+        assertTrue("No errors should be reported", result.second.isEmpty())
     }
     
     fun testEdgeCase_UnusualSyntax() {

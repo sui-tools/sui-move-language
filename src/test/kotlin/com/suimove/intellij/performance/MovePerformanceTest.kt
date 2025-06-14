@@ -41,12 +41,12 @@ class MovePerformanceTest : BasePlatformTestCase() {
         val largeFile = myFixture.configureByText("large_file.move", sb.toString())
         
         // Measure time to parse and highlight the file
-        PlatformTestUtil.startPerformanceTest("Parse large Move file", TIMEOUT_MS) {
+        PlatformTestUtil.startPerformanceTest("Parse large Move file", TIMEOUT_MS.toInt()) {
             myFixture.doHighlighting()
         }.assertTiming()
         
         // Measure time for code completion
-        PlatformTestUtil.startPerformanceTest("Code completion in large file", TIMEOUT_MS) {
+        PlatformTestUtil.startPerformanceTest("Code completion in large file", TIMEOUT_MS.toInt()) {
             myFixture.completeBasic()
         }.assertTiming()
     }
@@ -86,7 +86,7 @@ class MovePerformanceTest : BasePlatformTestCase() {
         """.trimIndent())
         
         // Measure time to resolve references
-        PlatformTestUtil.startPerformanceTest("Resolve references in complex project", TIMEOUT_MS) {
+        PlatformTestUtil.startPerformanceTest("Cross-module reference resolution", TIMEOUT_MS.toInt()) {
             myFixture.doHighlighting()
         }.assertTiming()
     }
@@ -149,7 +149,7 @@ class MovePerformanceTest : BasePlatformTestCase() {
         val complexFile = myFixture.configureByText("parsing_test.move", sb.toString())
         
         // Measure time to parse the file
-        PlatformTestUtil.startPerformanceTest("Parse complex expressions", TIMEOUT_MS) {
+        PlatformTestUtil.startPerformanceTest("Parse complex expressions", TIMEOUT_MS.toInt()) {
             myFixture.doHighlighting()
         }.assertTiming()
     }
@@ -179,7 +179,7 @@ class MovePerformanceTest : BasePlatformTestCase() {
         val typeFile = myFixture.configureByText("type_inference.move", sb.toString())
         
         // Measure time for type inference
-        PlatformTestUtil.startPerformanceTest("Type inference performance", TIMEOUT_MS) {
+        PlatformTestUtil.startPerformanceTest("Type inference performance", TIMEOUT_MS.toInt()) {
             myFixture.doHighlighting()
         }.assertTiming()
     }
