@@ -12,9 +12,15 @@ sealed class MoveType {
     object U128 : MoveType()
     object U256 : MoveType()
     object Address : MoveType()
-    data class Vector(val elementType: MoveType) : MoveType()
-    data class Struct(val name: String, val module: String? = null) : MoveType()
-    data class Reference(val mutable: Boolean, val innerType: MoveType) : MoveType()
+    data class Vector(val elementType: MoveType) : MoveType() {
+        override fun toString(): String = "vector<$elementType>"
+    }
+    data class Struct(val name: String, val module: String? = null) : MoveType() {
+        override fun toString(): String = if (module != null) "$module::$name" else name
+    }
+    data class Reference(val mutable: Boolean, val innerType: MoveType) : MoveType() {
+        override fun toString(): String = if (mutable) "&mut $innerType" else "&$innerType"
+    }
     object Unknown : MoveType()
     object Void : MoveType()
     
@@ -123,7 +129,9 @@ object MoveTypeSystem {
             from == to -> true
             from is MoveType.Unknown || to is MoveType.Unknown -> true
             from is MoveType.Reference && to is MoveType.Reference -> {
-                from.mutable == to.mutable && isAssignable(from.innerType, to.innerType)
+                // A mutable reference can be assigned to an immutable reference
+                // but not vice versa
+                (from.mutable || !to.mutable) && isAssignable(from.innerType, to.innerType)
             }
             else -> false
         }
