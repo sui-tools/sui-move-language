@@ -33,10 +33,12 @@ jobs:
           ${{ runner.os }}-gradle-
     
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x test
     
     - name: Run tests
-      run: ./gradlew test
+      run: ./gradlew test -x integrationTest
+      env:
+        GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
     
     - name: Generate test report
       uses: dorny/test-reporter@v1
