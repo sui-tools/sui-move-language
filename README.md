@@ -1,4 +1,4 @@
-# Sui Move Language Support for JetBrains IDEs
+# Sui Move IDE
 
 [![CI](https://github.com/sui-tools/sui-move-language/actions/workflows/ci.yml/badge.svg)](https://github.com/sui-tools/sui-move-language/actions/workflows/ci.yml)
 [![Code Quality](https://github.com/sui-tools/sui-move-language/actions/workflows/code-quality.yml/badge.svg)](https://github.com/sui-tools/sui-move-language/actions/workflows/code-quality.yml)
@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/sui-tools/sui-move-language.svg)](LICENSE)
 
 <!-- Plugin description -->
-A comprehensive IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
+**Sui Move IDE** is a comprehensive IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
 
 This plugin provides full language support for Move in JetBrains IDEs, including:
 - Syntax highlighting and code analysis
@@ -35,7 +35,7 @@ Perfect for developers building smart contracts and applications on the Sui bloc
 ### From JetBrains Marketplace (Coming Soon)
 1. Open IntelliJ IDEA
 2. Go to **File → Settings → Plugins → Marketplace**
-3. Search for "Sui Move Language"
+3. Search for "Sui Move IDE"
 4. Click **Install**
 5. Restart the IDE
 

@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.suimove.lang</id>
-    <name>Sui Move Language</name>
+    <name>Sui Move IDE</name>
     <vendor email="support@sui-move.com" url="https://github.com/sui-tools/sui-move-language">Sui Move</vendor>
 
     <depends>com.intellij.modules.platform</depends>
