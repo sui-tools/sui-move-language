@@ -24,7 +24,7 @@
 
 ```bash
 # Clone and build
-git clone https://github.com/ravidsrk/sui-move-language.git
+git clone https://github.com/sui-tools/sui-move-language.git
 cd sui-move-language
 ./gradlew build -x test
 

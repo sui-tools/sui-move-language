@@ -18,7 +18,7 @@ We take the security of our software seriously. If you believe you have found a 
 - Disclose the vulnerability publicly before it has been addressed
 
 ### Please DO:
-- Email us at: security@your-email.com (replace with your actual security email)
+- Email us at: support@sui-move.com (replace with your actual security email)
 - Include the following information:
   - Type of vulnerability
   - Full paths of source file(s) related to the vulnerability

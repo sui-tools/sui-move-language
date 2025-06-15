@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: GitHub Discussions
-    url: https://github.com/ravidsrk/sui-move-language/discussions
+    url: https://github.com/sui-tools/sui-move-language/discussions
     about: Please ask and answer questions here
   - name: Discord Community
     url: https://discord.gg/your-discord-link
     about: Join our Discord server for real-time discussions
   - name: Documentation
-    url: https://github.com/ravidsrk/sui-move-language/wiki
+    url: https://github.com/sui-tools/sui-move-language/wiki
     about: Check our wiki for guides and documentation

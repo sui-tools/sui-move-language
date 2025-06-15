@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>com.suimove.intellij</id>
     <name>Sui Move Language</name>
-    <vendor email="support@suimove.com" url="https://github.com/yourusername/sui-move-language">Sui Move</vendor>
+    <vendor email="support@sui-move.com" url="https://github.com/sui-tools/sui-move-language">Sui Move</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 

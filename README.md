@@ -1,9 +1,9 @@
 # Sui Move Language Support for JetBrains IDEs
 
-[![CI](https://github.com/ravidsrk/sui-move-language/actions/workflows/ci.yml/badge.svg)](https://github.com/ravidsrk/sui-move-language/actions/workflows/ci.yml)
-[![Code Quality](https://github.com/ravidsrk/sui-move-language/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ravidsrk/sui-move-language/actions/workflows/code-quality.yml)
+[![CI](https://github.com/sui-tools/sui-move-language/actions/workflows/ci.yml/badge.svg)](https://github.com/sui-tools/sui-move-language/actions/workflows/ci.yml)
+[![Code Quality](https://github.com/sui-tools/sui-move-language/actions/workflows/code-quality.yml/badge.svg)](https://github.com/sui-tools/sui-move-language/actions/workflows/code-quality.yml)
 [![JetBrains Plugin](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![License](https://img.shields.io/github/license/ravidsrk/sui-move-language.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/sui-tools/sui-move-language.svg)](LICENSE)
 
 <!-- Plugin description -->
 A comprehensive IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
@@ -48,7 +48,7 @@ Perfect for developers building smart contracts and applications on the Sui bloc
 ### From Source
 ```bash
 # Clone the repository
-git clone https://github.com/ravidsrk/sui-move-language.git
+git clone https://github.com/sui-tools/sui-move-language.git
 cd sui-move-language
 
 # Build the plugin
@@ -70,7 +70,7 @@ cd sui-move-language
 ### Building
 ```bash
 # Clone the repository
-git clone https://github.com/ravidsrk/sui-move-language.git
+git clone https://github.com/sui-tools/sui-move-language.git
 cd sui-move-language
 
 # Build the plugin
@@ -161,9 +161,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/ravidsrk/sui-move-language/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/ravidsrk/sui-move-language/discussions)
-- **Documentation**: [Wiki](https://github.com/ravidsrk/sui-move-language/wiki)
+- **Issues**: [GitHub Issues](https://github.com/sui-tools/sui-move-language/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sui-tools/sui-move-language/discussions)
+- **Documentation**: [Wiki](https://github.com/sui-tools/sui-move-language/wiki)
 
 ---
 

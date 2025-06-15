@@ -23,7 +23,7 @@
 ### Fixed
 - N/A
 
-## [0.1.0] - 2024-01-13
+## [0.1.0] - 2025-06-15
 
 ### Added
 - Initial plugin implementation

@@ -12,7 +12,7 @@ Thank you for your interest in contributing to the Sui Move Language plugin! We 
    ```
 3. Add the upstream repository:
    ```bash
-   git remote add upstream https://github.com/ravidsrk/sui-move-language.git
+   git remote add upstream https://github.com/sui-tools/sui-move-language.git
    ```
 
 ## Development Setup
