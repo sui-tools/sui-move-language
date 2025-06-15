@@ -75,7 +75,7 @@ jobs:
     # Optional: Publish to JetBrains Marketplace
     # Requires PUBLISH_TOKEN secret to be set
     - name: Publish to JetBrains Marketplace
-      if: ${{ secrets.PUBLISH_TOKEN != '' }}
+      if: ${{ env.PUBLISH_TOKEN != '' }}
       run: ./gradlew publishPlugin --no-daemon
       env:
         PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

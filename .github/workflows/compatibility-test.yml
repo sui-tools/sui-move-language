@@ -41,14 +41,13 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
     
-    # Temporarily skip tests
-    # - name: Run tests
-    #   run: ./gradlew test --no-daemon --console=plain -x integrationTest
-    #   env:
-    #     GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
+    - name: Run tests
+      run: ./gradlew test --no-daemon --console=plain
+      env:
+        GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
     
     - name: Build plugin
-      run: ./gradlew buildPlugin -x buildSearchableOptions -x test --no-daemon
+      run: ./gradlew buildPlugin -x buildSearchableOptions --no-daemon
       env:
         GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
     

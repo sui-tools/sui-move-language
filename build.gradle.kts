@@ -92,19 +92,29 @@ tasks {
         jvmArgs = listOf(
             "-Djava.awt.headless=true",
             "-Didea.test.framework.detector=com.intellij.testFramework.LightPlatformTestCase",
-            "-Didea.home.path=${layout.buildDirectory.get()}",
-            "-Didea.config.path=${layout.buildDirectory.get()}/config",
-            "-Didea.system.path=${layout.buildDirectory.get()}/system"
+            "-Didea.home.path=${layout.buildDirectory.get()}/idea-sandbox",
+            "-Didea.config.path=${layout.buildDirectory.get()}/idea-sandbox/config",
+            "-Didea.system.path=${layout.buildDirectory.get()}/idea-sandbox/system",
+            "-Didea.plugins.path=${layout.buildDirectory.get()}/idea-sandbox/plugins",
+            "-Didea.log.path=${layout.buildDirectory.get()}/idea-sandbox/log",
+            "-Dfile.encoding=UTF-8",
+            "-Duser.language=en",
+            "-Duser.country=US"
         )
         
         // Increase memory for tests
-        maxHeapSize = "1024m"
+        maxHeapSize = "2048m"
         
         // Show test output
         testLogging {
             events("passed", "skipped", "failed")
-            showStandardStreams = true
+            showStandardStreams = false
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         }
+        
+        // Set system properties for IntelliJ
+        systemProperty("idea.force.use.core.classloader", "true")
+        systemProperty("idea.use.core.classloader.for.plugin.path", "true")
     }
 
     patchPluginXml {

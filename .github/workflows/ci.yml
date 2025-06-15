@@ -29,10 +29,20 @@ jobs:
     - name: Download dependencies
       run: ./gradlew dependencies --no-daemon
     
-    - name: Build without tests
-      run: ./gradlew build -x test --no-daemon --console=plain
+    - name: Run tests
+      run: ./gradlew test --no-daemon --console=plain
       env:
         GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: |
+          build/test-results/test/
+          build/reports/tests/test/
+        retention-days: 7
     
   build:
     runs-on: ubuntu-latest
