@@ -23,6 +23,12 @@
 ### Fixed
 - N/A
 
+## [0.1.1] - 2025-06-15
+
+### Fixed
+- Fixed deprecated TemplateContextType constructor usage to ensure compatibility with future IntelliJ versions
+- Updated to use single-parameter constructor as recommended by IntelliJ Platform API
+
 ## [0.1.0] - 2025-06-15
 
 ### Added
