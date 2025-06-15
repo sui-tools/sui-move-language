@@ -11,14 +11,19 @@ class MoveSettingsConfigurable : Configurable {
     @NlsContexts.ConfigurableName
     override fun getDisplayName(): String = "Sui Move"
     
+    override fun getHelpTopic(): String = "com.suimove.intellij.settings"
+    
     override fun createComponent(): JComponent? {
         settingsComponent = MoveSettingsComponent()
+        // Initialize with current settings
+        reset()
         return settingsComponent?.panel
     }
     
     override fun isModified(): Boolean {
         val settings = MoveSettings.instance
-        return settingsComponent?.suiCliPath != settings.suiCliPath
+        // Return false if component hasn't been created yet
+        return settingsComponent?.suiCliPath != null && settingsComponent?.suiCliPath != settings.suiCliPath
     }
     
     @Throws(ConfigurationException::class)

@@ -1,0 +1,58 @@
+# Add labels to PRs based on file changes
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/**/*.md'
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/test/**'
+      - '**/test/**'
+      - '**/*Test.kt'
+
+parser:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/main/kotlin/com/suimove/intellij/parser/**'
+      - 'src/main/kotlin/com/suimove/intellij/lexer/**'
+      - 'src/main/grammars/**'
+
+psi:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/main/kotlin/com/suimove/intellij/psi/**'
+
+highlighting:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/main/kotlin/com/suimove/intellij/highlighting/**'
+      - 'src/main/kotlin/com/suimove/intellij/annotator/**'
+
+completion:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/main/kotlin/com/suimove/intellij/completion/**'
+
+build:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+
+ci:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'gradle/libs.versions.toml'
+      - 'build.gradle.kts'

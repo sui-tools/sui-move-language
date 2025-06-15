@@ -139,10 +139,13 @@
         <!-- Notification Group -->
         <notificationGroup
                 id="Sui Move"
-                displayType="BALLOON"/>
+                displayType="BALLOON" />
                 
         <!-- Project Service -->
         <projectService serviceImplementation="com.suimove.intellij.compiler.MoveCompilerService"/>
+        
+        <!-- Application Service -->
+        <applicationService serviceImplementation="com.suimove.intellij.settings.MoveSettings"/>
     </extensions>
 
     <actions>

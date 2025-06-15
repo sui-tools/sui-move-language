@@ -1,0 +1,23 @@
+name: Update Badges
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
+    
+    steps:
+    - name: Create test status badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: YOUR_GIST_ID_HERE  # Replace with your Gist ID
+        filename: sui-move-language-tests.json
+        label: tests
+        message: ${{ github.event.workflow_run.conclusion == 'success' && 'passing' || 'failing' }}
+        color: ${{ github.event.workflow_run.conclusion == 'success' && 'brightgreen' || 'red' }}
