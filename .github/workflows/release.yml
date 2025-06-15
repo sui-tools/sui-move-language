@@ -33,7 +33,7 @@ jobs:
       run: ./gradlew test --no-daemon
     
     - name: Build plugin
-      run: ./gradlew buildPlugin --no-daemon
+      run: ./gradlew buildPlugin -x buildSearchableOptions --no-daemon
     
     - name: Verify plugin
       run: ./gradlew verifyPlugin --no-daemon

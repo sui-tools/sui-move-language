@@ -45,7 +45,7 @@ jobs:
       run: ./gradlew test --no-daemon --console=plain
     
     - name: Build plugin
-      run: ./gradlew buildPlugin --no-daemon
+      run: ./gradlew buildPlugin -x buildSearchableOptions --no-daemon
     
     - name: Verify plugin for IDE ${{ matrix.ide-version }}
       run: ./gradlew verifyPlugin -Pplugin.verifier.ide.versions=${{ matrix.ide-version }} --no-daemon
@@ -76,8 +76,8 @@ jobs:
     - name: Check test results
       run: |
         if [ "${{ needs.test-matrix.result }}" == "success" ]; then
-          echo "✅ All compatibility tests passed!"
+          echo " All compatibility tests passed!"
         else
-          echo "❌ Some compatibility tests failed."
+          echo " Some compatibility tests failed."
           exit 1
         fi
