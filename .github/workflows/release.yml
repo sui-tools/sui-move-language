@@ -48,29 +48,17 @@ jobs:
         fi
     
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      run: |
+        gh release create v${{ steps.get_version.outputs.VERSION }} \
+          ./build/distributions/sui-move-language-${{ steps.get_version.outputs.VERSION }}.zip \
+          --title "Release v${{ steps.get_version.outputs.VERSION }}" \
+          --notes "## What's Changed
+
+        See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+        
+        **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ steps.get_version.outputs.VERSION }}...v${{ steps.get_version.outputs.VERSION }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.get_version.outputs.VERSION }}
-        release_name: Release v${{ steps.get_version.outputs.VERSION }}
-        body: |
-          ## What's Changed
-          
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ steps.get_version.outputs.VERSION }}...v${{ steps.get_version.outputs.VERSION }}
-        draft: false
-        prerelease: false
-    
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/distributions/sui-move-language-${{ steps.get_version.outputs.VERSION }}.zip
-        asset_name: sui-move-language-${{ steps.get_version.outputs.VERSION }}.zip
-        asset_content_type: application/zip
     
     # Optional: Publish to JetBrains Marketplace
     # Requires PUBLISH_TOKEN secret to be set
