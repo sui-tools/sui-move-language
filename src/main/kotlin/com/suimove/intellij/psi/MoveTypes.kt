@@ -118,10 +118,44 @@ object MoveTypes {
     @JvmField val BINARY_EXPR = IElementType("BINARY_EXPR", MoveLanguage)
     @JvmField val ASSIGNMENT = IElementType("ASSIGNMENT", MoveLanguage)
     @JvmField val TYPE_ANNOTATION = IElementType("TYPE_ANNOTATION", MoveLanguage)
+    @JvmField val STRUCT_FIELD = IElementType("STRUCT_FIELD", MoveLanguage)
+    @JvmField val ATTRIBUTE = IElementType("ATTRIBUTE", MoveLanguage)
+    @JvmField val ATTRIBUTE_LIST = IElementType("ATTRIBUTE_LIST", MoveLanguage)
+    @JvmField val ATTRIBUTE_ARG = IElementType("ATTRIBUTE_ARG", MoveLanguage)
+    
+    // Type-related node types
+    @JvmField val TYPE_PARAMETER = IElementType("TYPE_PARAMETER", MoveLanguage)
+    @JvmField val TYPE_PARAMETER_LIST = IElementType("TYPE_PARAMETER_LIST", MoveLanguage)
+    @JvmField val TYPE_ARGUMENT = IElementType("TYPE_ARGUMENT", MoveLanguage)
+    @JvmField val TYPE_ARGUMENT_LIST = IElementType("TYPE_ARGUMENT_LIST", MoveLanguage)
+    
+    // PSI Definition Node Types
+    @JvmField val SPEC_BLOCK = IElementType("SPEC_BLOCK", MoveLanguage)
+    @JvmField val INVARIANT_DECL = IElementType("INVARIANT_DECL", MoveLanguage)
+    @JvmField val ABORT_DECL = IElementType("ABORT_DECL", MoveLanguage)
+    @JvmField val LOOP_DECL = IElementType("LOOP_DECL", MoveLanguage)
+    @JvmField val WHILE_DECL = IElementType("WHILE_DECL", MoveLanguage)
+    @JvmField val IF_DECL = IElementType("IF_DECL", MoveLanguage)
+    @JvmField val ELSE_DECL = IElementType("ELSE_DECL", MoveLanguage)
+    @JvmField val RETURN_DECL = IElementType("RETURN_DECL", MoveLanguage)
+    @JvmField val BREAK_DECL = IElementType("BREAK_DECL", MoveLanguage)
+    @JvmField val CONTINUE_DECL = IElementType("CONTINUE_DECL", MoveLanguage)
+    @JvmField val REQUIRES_DECL = IElementType("REQUIRES_DECL", MoveLanguage)
+    @JvmField val ENSURES_DECL = IElementType("ENSURES_DECL", MoveLanguage)
+    @JvmField val PRAGMA_DECL = IElementType("PRAGMA_DECL", MoveLanguage)
     
     object Factory {
         fun createElement(node: com.intellij.lang.ASTNode): com.intellij.psi.PsiElement {
-            return com.intellij.extapi.psi.ASTWrapperPsiElement(node)
+            return when (node.elementType) {
+                FUNCTION_DEFINITION -> com.suimove.intellij.psi.impl.MoveFunctionImpl(node)
+                MODULE_DEFINITION -> com.suimove.intellij.psi.impl.MoveModuleImpl(node)
+                STRUCT_DEFINITION -> com.suimove.intellij.psi.impl.MoveStructImpl(node)
+                STRUCT_FIELD -> com.suimove.intellij.psi.impl.MoveStructFieldImpl(node)
+                ATTRIBUTE -> com.suimove.intellij.psi.impl.MoveAttributeImpl(node)
+                ATTRIBUTE_LIST -> com.suimove.intellij.psi.impl.MoveAttributeListImpl(node)
+                ATTRIBUTE_ARG -> com.suimove.intellij.psi.impl.MoveAttributeArgumentImpl(node)
+                else -> com.intellij.extapi.psi.ASTWrapperPsiElement(node)
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.0"
     id("org.jetbrains.changelog") version "2.2.0"
     id("org.jetbrains.grammarkit") version "2022.3.2"
+    id("jacoco")
 }
 
 group = properties("pluginGroup").get()
@@ -116,6 +117,19 @@ tasks {
         systemProperty("idea.force.use.core.classloader", "true")
         systemProperty("idea.use.core.classloader.for.plugin.path", "true")
     }
+    
+    test {
+        finalizedBy(jacocoTestReport)
+    }
+    
+    jacocoTestReport {
+        dependsOn(test)
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+            csv.required.set(false)
+        }
+    }
 
     patchPluginXml {
         version.set(properties("pluginVersion"))
@@ -168,4 +182,8 @@ tasks {
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
         // channels.set(listOf(properties("pluginVersion").map { it.split('-').getOrElse(1) { "default" }.split('.').first() }))
     }
+}
+
+jacoco {
+    toolVersion = "0.8.11"
 }

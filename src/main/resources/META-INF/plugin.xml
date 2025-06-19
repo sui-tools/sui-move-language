@@ -99,8 +99,102 @@
                          displayName="Naming convention violations"
                          groupName="Move"
                          enabledByDefault="true"
-                         level="WEAK WARNING"
+                         level="WARNING"
                          implementationClass="com.suimove.intellij.inspections.MoveNamingConventionInspection"/>
+        
+        <localInspection language="Move"
+                         shortName="SuiObjectRequirements"
+                         displayName="Sui object requirements"
+                         groupName="Sui"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="com.suimove.intellij.inspections.SuiObjectInspection"/>
+        
+        <localInspection language="Move"
+                         shortName="SuiEntryFunction"
+                         displayName="Sui entry function requirements"
+                         groupName="Sui"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.suimove.intellij.inspections.SuiEntryFunctionInspection"/>
+        
+        <!-- Quick Fixes -->
+        <localInspection language="Move" 
+                        implementationClass="com.suimove.intellij.quickfix.AddUidFieldQuickFix"
+                        displayName="Add UID field quick fix"
+                        groupName="Sui"
+                        enabledByDefault="true"
+                        level="ERROR"/>
+        
+        <localInspection language="Move" 
+                        implementationClass="com.suimove.intellij.quickfix.AddTxContextParameterQuickFix"
+                        displayName="Add TxContext parameter quick fix"
+                        groupName="Sui"
+                        enabledByDefault="true"
+                        level="ERROR"/>
+        
+        <!-- Test Runner -->
+        <configurationType implementation="com.suimove.intellij.testing.MoveTestRunConfigurationType"/>
+        
+        <runLineMarkerContributor language="Move" 
+                                 implementationClass="com.suimove.intellij.testing.MoveTestLineMarkerProvider"/>
+        
+        <codeInsight.lineMarkerProvider language="Move"
+                                       implementationClass="com.suimove.intellij.testing.MoveTestModuleLineMarkerProvider"/>
+        
+        <testFinder implementation="com.suimove.intellij.testing.MoveTestFinder"/>
+        
+        <testFramework implementation="com.suimove.intellij.testing.MoveTestFramework"/>
+        
+        <!-- Refactoring -->
+        <refactoring.extractMethodHandler 
+                language="Move"
+                implementationClass="com.suimove.intellij.refactoring.MoveExtractFunctionHandler"/>
+        
+        <refactoring.inlineHandler
+                language="Move"
+                implementationClass="com.suimove.intellij.refactoring.MoveInlineFunctionHandler"/>
+        
+        <refactoring.inlineHandler
+                language="Move" 
+                implementationClass="com.suimove.intellij.refactoring.MoveInlineVariableHandler"/>
+        
+        <renameHandler
+                implementation="com.suimove.intellij.refactoring.MoveRenameHandler"
+                order="first"/>
+        
+        <renamePsiElementProcessor
+                implementation="com.suimove.intellij.refactoring.MoveRenamePsiElementProcessor"/>
+        
+        <!-- Debugger -->
+        <programRunner 
+                implementation="com.suimove.intellij.debugger.MoveDebuggerRunner"
+                order="first"/>
+        
+        <xdebugger.breakpointType
+                implementation="com.suimove.intellij.debugger.MoveLineBreakpointType"/>
+        
+        <xdebugger.settings
+                implementation="com.suimove.intellij.debugger.MoveDebuggerSettings"/>
+        
+        <!-- Type System Annotator -->
+        <annotator
+                language="Move"
+                implementationClass="com.suimove.intellij.annotator.MoveTypeAnnotator"
+                order="after MoveAnnotator"/>
+        
+        <!-- Services -->
+        <projectService serviceImplementation="com.suimove.intellij.services.type.MoveTypeInferenceEngine"/>
+        <projectService serviceImplementation="com.suimove.intellij.services.type.MoveTypeCache"/>
+        <projectService serviceImplementation="com.suimove.intellij.services.sui.SuiFrameworkLibrary"/>
+        <projectService serviceImplementation="com.suimove.intellij.cli.SuiCliService"/>
+        
+        <!-- Stub Indexes -->
+        <stubIndex implementation="com.suimove.intellij.stubs.MoveModuleIndex"/>
+        
+        <!-- Postfix Templates -->
+        <postfixTemplateProvider language="Move"
+                                 implementationClass="com.suimove.intellij.completion.MovePostfixTemplateProvider"/>
         
         <!-- Intentions -->
         <intentionAction>
@@ -135,7 +229,12 @@
                 icon="/icons/move.svg"
                 anchor="right"
                 factoryClass="com.suimove.intellij.toolwindow.MoveToolWindowFactory"/>
-
+        
+        <toolWindow id="Move Tests"
+                    icon="MoveIcons.TEST_FUNCTION"
+                    anchor="bottom"
+                    factoryClass="com.intellij.execution.testframework.ToolWindowTestsFactory"/>
+                
         <!-- Notification Group -->
         <notificationGroup
                 id="Sui Move"
@@ -146,6 +245,21 @@
         
         <!-- Application Service -->
         <applicationService serviceImplementation="com.suimove.intellij.settings.MoveSettings"/>
+        
+        <!-- Type System Services -->
+        <applicationService serviceImplementation="com.suimove.intellij.services.MoveTypeCache"/>
+        <projectService serviceImplementation="com.suimove.intellij.services.MoveTypeInferenceEngine"/>
+        
+        <!-- Optimized Services -->
+        <projectService serviceImplementation="com.suimove.intellij.services.type.MoveTypeCacheOptimized"/>
+        <projectService serviceImplementation="com.suimove.intellij.services.type.MoveTypeInferenceOptimized"/>
+        <projectService serviceImplementation="com.suimove.intellij.performance.MovePerformanceMonitor"/>
+        
+        <!-- Sui Framework Service -->
+        <applicationService serviceImplementation="com.suimove.intellij.services.SuiFrameworkLibrary"/>
+        
+        <!-- Sui CLI Service -->
+        <applicationService serviceImplementation="com.suimove.intellij.cli.SuiCliService"/>
     </extensions>
 
     <actions>
@@ -177,5 +291,41 @@
                     text="Deploy"
                     description="Deploy Move modules"/>
         </group>
+        
+        <action id="Move.RunTest" 
+                class="com.suimove.intellij.testing.MoveRunTestAction"
+                text="Run Move Test"
+                description="Run Move test at caret">
+            <add-to-group group-id="RunContextGroup" anchor="first"/>
+        </action>
+        
+        <action id="Move.DebugTest"
+                class="com.suimove.intellij.testing.MoveDebugTestAction"
+                text="Debug Move Test"
+                description="Debug Move test at caret">
+            <add-to-group group-id="RunContextGroup" anchor="after" relative-to-action="Move.RunTest"/>
+        </action>
+        
+        <!-- Refactoring Actions -->
+        <action id="Move.ExtractFunction"
+                class="com.intellij.refactoring.actions.ExtractMethodAction"
+                text="Extract Function..."
+                description="Extract selected code into a new function">
+            <add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="ExtractMethod"/>
+        </action>
+        
+        <action id="Move.InlineFunction"
+                class="com.intellij.refactoring.actions.InlineAction"
+                text="Inline Function..."
+                description="Inline function at caret">
+            <add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="Inline"/>
+        </action>
+        
+        <action id="Move.Rename"
+                class="com.intellij.refactoring.actions.RenameElementAction"
+                text="Rename..."
+                description="Rename Move element">
+            <add-to-group group-id="RefactoringMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
