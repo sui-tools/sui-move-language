@@ -1,5 +1,68 @@
 # Changelog
 
+## [2.0.0] - 2025-06-25
+
+### 🎉 Major Release - Complete Rewrite
+
+### Added
+- **Advanced Type System**
+  - Full type inference engine with generic support
+  - Type-aware code completion
+  - Real-time type annotations
+  - Type mismatch highlighting
+  
+- **Code Completion Engine**
+  - Smart context-aware completion
+  - Chain completion for dot access
+  - Parameter hints and info
+  - Import assistance
+  - Postfix templates
+  
+- **Sui Framework Integration**
+  - Deep framework type understanding
+  - Object validation (UID, abilities)
+  - Entry function validation
+  - Quick fixes for common issues
+  
+- **Professional Testing Tools**
+  - Integrated test runner
+  - Test coverage visualization
+  - Gutter icons for quick execution
+  - Test navigation
+  - Results tree view
+  
+- **Full Debugging Support**
+  - Line breakpoints
+  - Step debugging (over/into/out)
+  - Variable inspection
+  - Watch expressions
+  - Call stack navigation
+  
+- **Advanced Refactoring**
+  - Extract function
+  - Inline function/variable
+  - Smart rename across files
+  - Safe delete with dependency checking
+  - Move refactoring
+  
+- **Performance Optimizations**
+  - Optimized type cache
+  - Parallel processing
+  - Memory efficiency improvements
+  - Background processing
+
+### Changed
+- Minimum IntelliJ version: 2023.1
+- Complete rewrite of core engine
+- Improved UI responsiveness
+- Better error messages
+
+### Fixed
+- All known v1.x issues resolved
+- Performance issues with large projects
+- Type resolution accuracy
+- Completion relevance
+
 ## [Unreleased]
 
 ### Added
