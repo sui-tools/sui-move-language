@@ -7,167 +7,189 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/27656.svg)](https://plugins.jetbrains.com/plugin/27656-move-language-for-sui)
 
 <!-- Plugin description -->
-**Move Language for Sui** is a comprehensive IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
+**Move Language for Sui** is a professional-grade IDE plugin for the Move programming language, specifically tailored for Sui blockchain development.
 
-This plugin provides full language support for Move in JetBrains IDEs, including:
-- Syntax highlighting and code analysis
-- Smart code completion and navigation
-- Integrated build tools and SDK management
-- Project templates and file templates
-- Real-time error detection and quick fixes
-- Refactoring support and code formatting
+This plugin provides comprehensive language support for Move in JetBrains IDEs, featuring advanced type inference, intelligent code completion, integrated testing and debugging, and powerful refactoring tools. Whether you're building smart contracts, modules, or full applications on Sui, this plugin delivers the development experience you expect from a modern IDE.
 
-Perfect for developers building smart contracts and applications on the Sui blockchain.
+Key highlights:
+- **Advanced Type System**: Full type inference with generic support
+- **Smart Code Completion**: Context-aware suggestions powered by type analysis
+- **Integrated Testing**: Run and debug Move tests directly from the IDE
+- **Professional Debugging**: Breakpoints, stepping, and variable inspection
+- **Powerful Refactoring**: Extract function, inline, rename, and more
+- **Sui Framework Integration**: Deep understanding of Sui-specific patterns
+
+Perfect for developers building production-grade smart contracts and applications on the Sui blockchain.
 <!-- Plugin description end -->
 
 ## 🚀 Features
 
-- **Syntax Highlighting**: Full syntax highlighting for Move files
-- **Code Completion**: Smart code completion for Move constructs
-- **Project Templates**: Quick project setup with Move module templates
-- **Build Integration**: Build, test, and deploy Move modules from the IDE
-- **Error Highlighting**: Real-time error detection and highlighting
-- **Code Navigation**: Go to definition, find usages, and more
-- **Live Templates**: Predefined code snippets for common patterns
-- **Tool Window**: Dedicated Move tool window for build output
+### Core Language Support
+- **Syntax Highlighting**: Full syntax highlighting with semantic coloring
+- **Advanced Type Inference**: Complete type system with generic type resolution
+- **Smart Code Completion**: 
+  - Type-aware completions
+  - Struct field suggestions
+  - Function parameter hints
+  - Import assistance
+  - Sui framework API completions
+- **Code Navigation**: 
+  - Go to definition/implementation
+  - Find usages with scope filtering
+  - Structure view and file structure popup
+  - Quick documentation lookup
+
+### Development Tools
+- **Integrated Test Runner**:
+  - Run individual tests or test modules
+  - Test coverage visualization
+  - Test results tree view
+  - Failure stack traces with navigation
+- **Full Debugging Support**:
+  - Breakpoints and conditional breakpoints
+  - Step through code execution
+  - Variable and expression evaluation
+  - Call stack navigation
+  - Watch expressions
+- **Build Integration**: 
+  - Build, test, and deploy from the IDE
+  - Sui CLI integration
+  - Package management
+  - Deploy to devnet/testnet/mainnet
+
+### Code Quality
+- **Real-time Inspections**:
+  - Type checking
+  - Unused code detection
+  - Sui-specific best practices
+  - Security vulnerability detection
+- **Quick Fixes**:
+  - Auto-import suggestions
+  - Type mismatch corrections
+  - Missing ability additions
+  - Code generation helpers
+- **Code Formatting**:
+  - Configurable formatting rules
+  - Format on save
+  - Optimize imports
+
+### Refactoring Tools
+- **Extract Function**: Extract code into reusable functions
+- **Inline**: Inline variables and functions
+- **Rename**: Safe rename with reference updates
+- **Move**: Move definitions between modules
+- **Safe Delete**: Delete with usage checking
+- **Change Signature**: Update function signatures
+
+### Sui-Specific Features
+- **Framework Integration**: Deep knowledge of Sui framework modules
+- **Object Model Support**: Understand Sui's object system
+- **Transaction Building**: Visual transaction builder
+- **Gas Estimation**: Estimate gas costs before deployment
+- **Network Integration**: Switch between networks seamlessly
 
 ## 📦 Installation
 
 ### From JetBrains Marketplace
-1. Open IntelliJ IDEA
-2. Go to **File → Settings → Plugins → Marketplace**
+1. Open IntelliJ IDEA (2023.1 or later)
+2. Go to **Settings/Preferences → Plugins → Marketplace**
 3. Search for "Move Language for Sui"
 4. Click **Install**
 5. Restart the IDE
 
 Or install directly from: [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/27656-move-language-for-sui)
 
-### From Distribution File
-1. Download the plugin distribution: `build/distributions/sui-move-language-0.1.0.zip`
-2. In IntelliJ IDEA: **File → Settings → Plugins → ⚙️ → Install Plugin from Disk...**
-3. Select the downloaded ZIP file
-4. Restart the IDE
+### System Requirements
+- IntelliJ IDEA 2023.1+ (Community or Ultimate)
+- JDK 17 or higher
+- Sui CLI (optional, for full functionality)
 
-### From Source
-```bash
-# Clone the repository
-git clone https://github.com/sui-tools/sui-move-language.git
-cd sui-move-language
+## 🎯 Quick Start
 
-# Build the plugin
-./gradlew build -x test
+### Create a New Move Project
+1. **File → New → Project**
+2. Select **Move** from the left panel
+3. Choose **Sui Move Project**
+4. Configure project settings
+5. Click **Create**
 
-# The plugin ZIP will be in: build/distributions/sui-move-language-0.1.0.zip
+### Import Existing Project
+1. **File → Open**
+2. Select your Move project directory
+3. The plugin will auto-detect Move.toml
 
-# Or run in sandbox IDE for testing
-./gradlew runIde -x compileTestKotlin -x test
-```
+### Running Tests
+- Right-click on a test function → **Run 'test_name'**
+- Click the gutter icon next to test functions
+- Use **Run → Run...** for more options
+
+### Debugging
+1. Set breakpoints by clicking the gutter
+2. Right-click test → **Debug 'test_name'**
+3. Use the debug tool window to control execution
+
+## ⚙️ Configuration
+
+### Plugin Settings
+**Settings/Preferences → Languages & Frameworks → Move**
+
+- **Sui CLI Path**: Configure custom Sui CLI location
+- **Default Network**: Set default network (devnet/testnet/mainnet)
+- **Type Inference**: Configure inference depth and caching
+- **Code Style**: Customize formatting rules
+- **Inspections**: Enable/disable specific inspections
+
+### Performance Tuning
+For large projects, optimize performance:
+- Increase memory: `-Xmx4096m` in IDE VM options
+- Enable type cache: Settings → Move → Performance
+- Configure indexing scope in Project Structure
 
 ## 🛠️ Development
 
-### Prerequisites
-- JDK 17 or higher
-- IntelliJ IDEA 2023.2 or higher
-- Gradle 8.2 or higher
-
-### Building
+### Building from Source
 ```bash
-# Clone the repository
 git clone https://github.com/sui-tools/sui-move-language.git
 cd sui-move-language
-
-# Build the plugin
 ./gradlew buildPlugin
+```
 
-# Run tests
-./gradlew test
-
-# Run IDE with plugin for testing
+### Running in Development
+```bash
 ./gradlew runIde
 ```
 
-### Testing
-The project includes a comprehensive test suite:
-```bash
-# Run all tests
-./gradlew test
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
-# Run specific test class
-./gradlew test --tests "com.suimove.intellij.MoveAnnotatorTest"
+## 📚 Documentation
 
-# Run with test report
-./gradlew test --scan
-```
+- [Installation Guide](INSTALLATION.md)
+- [Performance Optimization](PERFORMANCE_OPTIMIZATION.md)
+- [Release Notes](RELEASE_NOTES_v2.0.0.md)
+- [Contributing Guide](CONTRIBUTING.md)
 
-### Code Quality
-```bash
-# Run ktlint
-./gradlew ktlintCheck
+## 🐛 Reporting Issues
 
-# Run detekt
-./gradlew detekt
+Found a bug? Please report it on our [issue tracker](https://github.com/sui-tools/sui-move-language/issues) with:
+- Plugin version
+- IDE version
+- Steps to reproduce
+- Expected vs actual behavior
 
-# Format code
-./gradlew ktlintFormat
-```
-
-## 🔄 CI/CD
-
-This project uses GitHub Actions for continuous integration:
-
-- **CI Workflow**: Runs on every push and pull request
-  - Executes all tests
-  - Builds the plugin
-  - Verifies plugin compatibility
-  - Uploads test results and artifacts
-
-- **Code Quality Workflow**: Checks code style and quality
-  - Runs ktlint for Kotlin code style
-  - Runs detekt for static analysis
-
-- **Release Workflow**: Automated releases on version tags
-  - Builds and tests the plugin
-  - Creates GitHub releases
-  - Optionally publishes to JetBrains Marketplace
-
-## 📋 Requirements
-
-- **IntelliJ Platform**: 2023.2 - 2024.1.*
-- **JDK**: 17 or higher
-- **Sui CLI**: Optional, for full Move development experience
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow Kotlin coding conventions
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting PR
-
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- Sui Foundation for the Move language
+- Sui Foundation for the Move language and Sui blockchain
 - JetBrains for the IntelliJ Platform SDK
-- All contributors to this project
+- The Move and Sui developer community
 
-## 📞 Support
+## 🌟 Star History
 
-- **Issues**: [GitHub Issues](https://github.com/sui-tools/sui-move-language/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/sui-tools/sui-move-language/discussions)
-- **Documentation**: [Wiki](https://github.com/sui-tools/sui-move-language/wiki)
+[![Star History Chart](https://api.star-history.com/svg?repos=sui-tools/sui-move-language&type=Date)](https://star-history.com/#sui-tools/sui-move-language&Date)
 
 ---
 
-**Note**: This plugin is currently in active development. Some features may be incomplete or subject to change.
+**Happy coding with Sui Move!** 🚀
