@@ -2,165 +2,210 @@
 
 Thank you for your interest in contributing to the Sui Move Language plugin! We welcome contributions from the community.
 
-## Getting Started
+## 🚀 Getting Started
 
-1. Fork the repository on GitHub
-2. Clone your fork locally:
+### Prerequisites
+- IntelliJ IDEA 2023.1+ (Community or Ultimate)
+- JDK 17 or higher
+- Gradle 8.5 or higher
+- Git
+
+### Development Setup
+
+1. **Fork and Clone**
    ```bash
    git clone https://github.com/YOUR_USERNAME/sui-move-language.git
    cd sui-move-language
-   ```
-3. Add the upstream repository:
-   ```bash
    git remote add upstream https://github.com/sui-tools/sui-move-language.git
    ```
 
-## Development Setup
+2. **Import Project**
+   - Open IntelliJ IDEA
+   - File → Open → Select the project directory
+   - Import as Gradle project
 
-### Prerequisites
-- JDK 17 or higher
-- IntelliJ IDEA 2023.2 or higher (Community or Ultimate)
-- Gradle 8.2 or higher
+3. **Configure SDK**
+   - File → Project Structure → Project
+   - Set Project SDK to JDK 17
+   - Set Language Level to 17
 
-### Building the Project
+## 🛠️ Building and Testing
+
 ```bash
 # Build the plugin
 ./gradlew buildPlugin
 
-# Run tests
+# Run all tests
 ./gradlew test
+
+# Run specific test
+./gradlew test --tests "com.suimove.intellij.*TestName"
 
 # Run the plugin in a sandbox IDE
 ./gradlew runIde
+
+# Check code style
+./gradlew ktlintCheck
+
+# Format code
+./gradlew ktlintFormat
 ```
 
-## Making Changes
+## 📁 Project Structure
+
+```
+src/
+├── main/
+│   ├── kotlin/com/suimove/intellij/
+│   │   ├── actions/          # IDE actions
+│   │   ├── analysis/         # Type analysis
+│   │   ├── annotator/        # Syntax highlighting
+│   │   ├── cli/              # Sui CLI integration
+│   │   ├── completion/       # Code completion
+│   │   ├── debugger/         # Debugging support
+│   │   ├── inspections/      # Code inspections
+│   │   ├── parser/           # Language parser
+│   │   ├── psi/              # PSI elements
+│   │   ├── refactoring/      # Refactoring tools
+│   │   ├── services/         # Plugin services
+│   │   └── testing/          # Test runner
+│   ├── resources/
+│   │   ├── META-INF/plugin.xml
+│   │   └── messages/
+│   └── gen/                  # Generated parser/lexer
+└── test/
+    ├── kotlin/               # Test files
+    └── testData/             # Test fixtures
+```
+
+## 💻 Development Guidelines
 
 ### Code Style
 - Follow Kotlin coding conventions
-- Use ktlint for code formatting:
-  ```bash
-  ./gradlew ktlintFormat
-  ```
-- Run detekt for static analysis:
-  ```bash
-  ./gradlew detekt
-  ```
+- Use meaningful variable and function names
+- Add KDoc comments for public APIs
+- Keep functions small and focused
 
-### Testing
-- Write tests for all new features
-- Ensure all tests pass before submitting:
-  ```bash
-  ./gradlew test
-  ```
-- Add integration tests for complex features
+### Testing Requirements
+- Write unit tests for all new features
+- Maintain test coverage above 80%
+- Use test fixtures in `testData/`
+- Test both positive and negative cases
 
-### Commit Messages
-- Use clear and descriptive commit messages
-- Follow conventional commits format:
-  - `feat:` for new features
-  - `fix:` for bug fixes
-  - `docs:` for documentation changes
-  - `test:` for test additions/changes
-  - `refactor:` for code refactoring
-  - `chore:` for maintenance tasks
+### PSI and Parser Development
+- Grammar files are in `src/main/grammars/`
+- Generate parser/lexer: `./gradlew generateParser`
+- PSI interfaces extend `MovePsiElement`
+- Use `MoveElementFactory` for PSI creation
 
-Example:
+### Type System Development
+- Type inference logic in `services/type/`
+- Cache types using `MoveTypeCache`
+- Handle generics and type parameters
+- Support Sui-specific types
+
+### Adding New Features
+
+1. **Code Completion**
+   - Extend `CompletionContributor`
+   - Add provider to `MoveCompletionContributor`
+   - Test with various contexts
+
+2. **Inspections**
+   - Extend `LocalInspectionTool`
+   - Register in `plugin.xml`
+   - Provide quick fixes when possible
+
+3. **Refactoring**
+   - Implement refactoring handler
+   - Add UI if needed
+   - Handle edge cases carefully
+
+## 🐛 Debugging Tips
+
+### Plugin Debugging
+```bash
+# Enable internal actions
+idea.is.internal=true
+
+# Add to Help | Diagnostic Tools | Debug Log Settings
+#com.suimove.intellij
 ```
-feat: add support for Move 2024 syntax
 
-- Add new keywords for Move 2024
-- Update parser to handle new syntax
-- Add tests for new features
-```
+### Common Issues
+- **Parser Issues**: Check grammar file and regenerate
+- **Type Resolution**: Enable type cache logging
+- **Performance**: Use built-in profiler
 
-## Submitting Changes
+## 📝 Submitting Changes
 
-1. Create a feature branch:
+### Pull Request Process
+
+1. **Create Feature Branch**
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-2. Make your changes and commit:
-   ```bash
-   git add .
-   git commit -m "feat: add amazing feature"
-   ```
+2. **Make Changes**
+   - Write clean, documented code
+   - Add/update tests
+   - Update documentation
 
-3. Push to your fork:
+3. **Commit Guidelines**
+   ```bash
+   git commit -m "feat: add new completion provider for struct fields"
+   ```
+   
+   Use conventional commits:
+   - `feat:` New feature
+   - `fix:` Bug fix
+   - `docs:` Documentation
+   - `test:` Tests
+   - `refactor:` Code refactoring
+   - `perf:` Performance improvement
+
+4. **Push and Create PR**
    ```bash
    git push origin feature/your-feature-name
    ```
+   - Fill out PR template
+   - Link related issues
+   - Add screenshots for UI changes
 
-4. Create a Pull Request:
-   - Go to the original repository on GitHub
-   - Click "New Pull Request"
-   - Select your fork and branch
-   - Fill in the PR template
-   - Submit the PR
+### Review Process
+- All PRs require at least one review
+- CI must pass (tests, linting)
+- Address review feedback promptly
+- Squash commits before merging
 
-## Pull Request Guidelines
+## 📚 Resources
 
-### PR Title
-- Use a clear and descriptive title
-- Follow the same format as commit messages
+### Documentation
+- [IntelliJ Platform SDK](https://plugins.jetbrains.com/docs/intellij/)
+- [Kotlin Documentation](https://kotlinlang.org/docs/)
+- [Move Language Spec](https://github.com/move-language/move)
+- [Sui Documentation](https://docs.sui.io/)
 
-### PR Description
-- Describe what changes you made
-- Explain why these changes are needed
-- Reference any related issues
-- Include screenshots for UI changes
+### Tools
+- [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit) - Parser generation
+- [PsiViewer](https://plugins.jetbrains.com/plugin/227-psiviewer) - PSI debugging
+- [IntelliJ Platform Explorer](https://plugins.jetbrains.com/intellij-platform-explorer/)
 
-### PR Checklist
-- [ ] Tests pass locally
-- [ ] Code follows style guidelines
-- [ ] Documentation is updated
-- [ ] Changelog is updated (for significant changes)
-- [ ] PR has a clear description
+### Community
+- [Sui Discord](https://discord.gg/sui) - #dev-tools channel
+- [GitHub Issues](https://github.com/sui-tools/sui-move-language/issues)
 
-## Reporting Issues
+## 🤝 Getting Help
 
-### Bug Reports
-When reporting bugs, please include:
-- Plugin version
-- IDE version and type
-- Operating system
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
-- Error messages/logs
+- **Questions**: Open a GitHub Discussion
+- **Bugs**: Create a GitHub Issue
+- **Ideas**: Share in Discussions
+- **Chat**: Join Sui Discord
 
-### Feature Requests
-For feature requests, please:
-- Check if the feature already exists
-- Search for similar requests
-- Provide a clear use case
-- Explain the expected behavior
+## 📄 License
 
-## Code of Conduct
+By contributing, you agree that your contributions will be licensed under the same license as the project (MIT).
 
-### Our Standards
-- Be respectful and inclusive
-- Welcome newcomers and help them get started
-- Accept constructive criticism
-- Focus on what is best for the community
-- Show empathy towards others
+---
 
-### Unacceptable Behavior
-- Harassment or discrimination
-- Trolling or insulting comments
-- Public or private harassment
-- Publishing others' private information
-- Other unprofessional conduct
-
-## Getting Help
-
-- **Discord**: Join our Discord server (link in README)
-- **GitHub Discussions**: Ask questions and discuss ideas
-- **Issue Tracker**: Report bugs and request features
-
-## License
-
-By contributing, you agree that your contributions will be licensed under the MIT License.
-
-Thank you for contributing to the Sui Move Language plugin!
+Thank you for contributing to the Sui Move Language plugin! Your efforts help make Move development better for everyone. 🚀
