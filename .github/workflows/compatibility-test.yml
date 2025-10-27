@@ -55,7 +55,7 @@ jobs:
       run: ./gradlew verifyPlugin -Pplugin.verifier.ide.versions=${{ matrix.ide-version }} --no-daemon
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: test-results-${{ matrix.os }}-${{ matrix.ide-version }}-java${{ matrix.java-version }}
@@ -63,7 +63,7 @@ jobs:
         retention-days: 7
     
     - name: Upload plugin artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: success() && matrix.os == 'ubuntu-latest' && matrix.java-version == '17'
       with:
         name: plugin-${{ matrix.ide-version }}

@@ -35,7 +35,7 @@ jobs:
         GRADLE_OPTS: -Xmx4g -XX:MaxMetaspaceSize=512m
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: test-results
@@ -70,7 +70,7 @@ jobs:
       run: ./gradlew verifyPlugin --no-daemon
     
     - name: Upload plugin artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: plugin-artifact
         path: build/distributions/*.zip
